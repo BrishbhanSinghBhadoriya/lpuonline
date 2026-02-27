@@ -106,17 +106,17 @@ const programs: Program[] = [
     title: "Online MBA",
     eligibility: "Bachelor's (Recognised)",
     duration: "2 Years (4 Semesters)",
-    fee: "Rs. 47000/Semester",
+    fee: "Rs. 40400/Semester",
     type: "PG",
-    image: "/OnlineMBA.png",
+    image: "/OnlineMBA.jpg",
   },
   {
     title: "Online M.Com",
     eligibility: "Bachelor's (Recognised)",
     duration: "2 Years (4 Semesters)",
-    fee: "Rs. 21000/Semester",
+    fee: "Rs. 20400/Semester",
     type: "PG",
-    image: "/OnlineMCom.png",
+    image: "/OnlineMCom.jpg",
   },
   {
     title: "Online MCA",
@@ -124,30 +124,30 @@ const programs: Program[] = [
     duration: "2 Years (4 Semesters)",
     fee: "Rs. 30000/Semester",
     type: "PG",
-    image: "/OnlineMCA.png",
+    image: "/OnlineMCA.jpg",
   },
   {
     title: "Online MA",
     eligibility: "Bachelor's (Recognised)",
     duration: "2 Years (4 Semesters)",
-    fee: "Rs. 18000/Semester",
+    fee: "Rs. 16400/Semester",
     type: "PG",
-    image: "/OnlineMA.png",
+    image: "/OnlineMA.jpg",
   },
   {
     title: "Online M.Sc (Mathematics)",
     eligibility: "12th (PCM/Physics and Math)",
     duration: "2 Years (4 Semesters)",
-    fee: "Rs. 21000/Semester",
+    fee: "Rs. 16400/Semester",
     type: "PG",
-    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80",
+    image: "/OnlineBBA.jpg",
   },
   // UG Courses (Bachelor's)
   {
     title: "Online BCA",
     eligibility: "10+2 (Any board)",
     duration: "3 Years (6 Semesters)",
-    fee: "Rs. 20000/Semester",
+    fee: "Rs. 20400/Semester",
     type: "UG",
     image: "/OnlineBCA.jpg",
   },
@@ -155,7 +155,7 @@ const programs: Program[] = [
     title: "Online BBA",
     eligibility: "10+2 (Any board)",
     duration: "3 Years (6 Semesters)",
-    fee: "Rs. 19000/Semester",
+    fee: "Rs. 20400/Semester",
     type: "UG",
     image: "/OnlineBBA.jpg",
   },
@@ -163,9 +163,9 @@ const programs: Program[] = [
     title: "Online BA",
     eligibility: "10+2 (Any board)",
     duration: "3 Years (6 Semesters)",
-    fee: "Rs. 10000/Semester",
+    fee: "Rs. 16400/Semester",
     type: "UG",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&q=80",
+    image: "OnlineMCom(1).jpg",
   },
 ];
 const tabs = ["All Courses", "UG Courses", "PG Courses"];
@@ -406,7 +406,7 @@ export default function LPUOnlinePage() {
           /* ORANGE HIGHLIGHT CARD */
           <div
             key={`highlight-${i}`}   // ✅ fixed unique key
-            className="bg-orange-500 text-white rounded-2xl p-7 flex flex-col h-full shadow-md"
+            className="bg-orange-400 text-white rounded-2xl p-7 flex flex-col h-full shadow-md"
           >
             <ul className="space-y-6 text-base leading-relaxed">
               {f.points.map((p, idx) => (
@@ -445,7 +445,12 @@ export default function LPUOnlinePage() {
             </p>
 
             {/* Button */}
-            <button className="mt-6 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition w-full">
+            <button 
+            onClick={() => {
+                    setEnquiryProgram(null);
+                    setEnquiryOpen(true);
+                  }}
+            className="mt-6 bg-orange-400 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition w-full">
               Know More
             </button>
 
