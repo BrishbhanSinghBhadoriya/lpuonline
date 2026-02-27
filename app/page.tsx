@@ -165,7 +165,7 @@ const programs: Program[] = [
     duration: "3 Years (6 Semesters)",
     fee: "Rs. 16400/Semester",
     type: "UG",
-    image: "OnlineMCom(1).jpg",
+    image: "OnlineMCom.jpg",
   },
 ];
 const tabs = ["All Courses", "UG Courses", "PG Courses"];
@@ -584,57 +584,74 @@ export default function LPUOnlinePage() {
       </div>
     </section>
 
-      {/* ─── ADMISSION PROCESS ──────────────────────────────────────────── */}
-     <section className="py-24 bg-gray-100">
-      <div className="max-w-5xl mx-auto px-6">
-        {/* Heading */}
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 text-center mb-12">
-          Admission Process
-        </h2>
+    <section className="py-24 bg-gray-100">
+  <div className="max-w-5xl mx-auto px-6">
+    <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 text-center mb-12">
+      Admission Process
+    </h2>
 
-        {/* Timeline Card */}
-        <div className="bg-white rounded-2xl shadow-md px-10 py-20">
-          {/* Titles Row */}
-          <div className="grid grid-cols-3 text-center mb-0">
-            {steps.map((step, i) => (
-              <div key={i} className="px-4">
-                <p className="font-bold text-gray-800 text-4xl md:text-base">
-                  {step.title}
-                </p>
+    <div className="bg-white rounded-2xl shadow-md px-6 md:px-10 py-10 md:py-20">
+
+      {/* ── MOBILE: Vertical Stack ── */}
+      <div className="flex flex-col gap-0 md:hidden">
+        {steps.map((step, i) => (
+          <div key={i} className="flex gap-4">
+            {/* Left: dot + line */}
+            <div className="flex flex-col items-center">
+              <div className="w-5 h-5 rounded-full border-2 border-orange-500 bg-white flex items-center justify-center shrink-0 mt-1">
+                <div className="w-2.5 h-2.5 rounded-full bg-orange-500" />
               </div>
-            ))}
-          </div>
-
-          {/* Timeline Line + Dots */}
-          <div className="relative flex items-center my-5">
-            {/* Full horizontal line */}
-            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-orange-400" />
-
-            {/* Dots positioned at 1/6, 3/6, 5/6 of width */}
-            <div className="relative w-full grid grid-cols-3">
-              {steps.map((_, i) => (
-                <div key={i} className="flex justify-center">
-                  <div className="relative z-10 w-5 h-5 rounded-full border-2 border-orange-500 bg-white flex items-center justify-center">
-                    <div className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                  </div>
-                </div>
-              ))}
+              {i < steps.length - 1 && (
+                <div className="w-px flex-1 bg-orange-400 my-1" />
+              )}
+            </div>
+            {/* Right: text */}
+            <div className="pb-8">
+              <p className="font-bold text-gray-800 text-base mb-1">{step.title}</p>
+              <p className="text-gray-500 text-sm leading-relaxed">{step.description}</p>
             </div>
           </div>
+        ))}
+      </div>
 
-          {/* Descriptions Row */}
-          <div className="grid grid-cols-3 text-center py-16">
-            {steps.map((step, i) => (
-              <div key={i} className="px-8">
-                <p className="text-gray-500 text-2xl leading-relaxed">
-                  {step.description}
-                </p>
+      {/* ── DESKTOP: Horizontal Timeline ── */}
+      <div className="hidden md:block">
+        {/* Titles */}
+        <div className="grid grid-cols-3 text-center mb-0">
+          {steps.map((step, i) => (
+            <div key={i} className="px-4">
+              <p className="font-bold text-gray-800 text-base">{step.title}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Line + Dots */}
+        <div className="relative flex items-center my-5">
+          <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-orange-400" />
+          <div className="relative w-full grid grid-cols-3">
+            {steps.map((_, i) => (
+              <div key={i} className="flex justify-center">
+                <div className="relative z-10 w-5 h-5 rounded-full border-2 border-orange-500 bg-white flex items-center justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-orange-500" />
+                </div>
               </div>
             ))}
           </div>
         </div>
+
+        {/* Descriptions */}
+        <div className="grid grid-cols-3 text-center">
+          {steps.map((step, i) => (
+            <div key={i} className="px-4">
+              <p className="text-gray-500 text-sm leading-relaxed">{step.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </section>
+
+    </div>
+  </div>
+</section>
 
       {/* ─── LEARNERS WORK AT ────────────────────────────────────────────── */}
       <section className="py-12 bg-gray-50 border-y border-gray-200 overflow-hidden">
@@ -710,23 +727,26 @@ export default function LPUOnlinePage() {
       {/* ─── TOP QUERIES ─────────────────────────────────────────────────── */}
      <section className="py-10 bg-black border-t border-gray-200">
       <div className="max-w-screen-2xl mx-auto px-6 md:px-10">
+
         <h3 className="text-white font-extrabold text-4xl mb-6">Top Query</h3>
 
-        <div className="grid grid-cols-3 gap-x-12 gap-y-3 ">
+        {/* Mobile: 2 columns | Desktop: 1 column vertical */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-6">
           {topQueries.map((q: string, i: number) => (
             <a
               key={`${q}-${i}`}
-               onClick={(e) => {
-    e.preventDefault();
-    setEnquiryProgram(null);
-    setEnquiryOpen(true);
-  }}
-              className="text-white text-2xl hover:underline hover:text-orange-500 transition-colors truncate cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setEnquiryProgram(null);
+                setEnquiryOpen(true);
+              }}
+              className="text-white text-sm md:text-lg hover:underline hover:text-orange-500 transition-colors cursor-pointer truncate"
             >
               {q}
             </a>
           ))}
         </div>
+
       </div>
     </section>
 
@@ -754,7 +774,7 @@ export default function LPUOnlinePage() {
         </a>
 
         <p className="text-gray-400 text-sm">
-          © 2025 learningshala.in | All Rights Reserved
+          © 2025 onlineuniversityadmission.online  | All Rights Reserved
         </p>
 
       </div>
