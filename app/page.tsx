@@ -281,7 +281,7 @@ export default function LPUOnlinePage() {
         setEnquiryProgram(null);
         setEnquiryOpen(true);
       }}
-      className="bg-orange-400 hover:bg-orange-600 text-white font-bold px-5 py-2 rounded-md text-2xl transition-all shadow-md"
+      className="bg-orange-400 hover:bg-orange-600 text-white  px-3 py-2 rounded-md text-1xl transition-all shadow-md"
     >
       Enroll Now
     </button>
@@ -723,6 +723,30 @@ export default function LPUOnlinePage() {
           </button>
         </div>
       </section>
+
+      {/* ─── MOBILE STICKY CTA ─────────────────────────────────────────── */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+        <div className="flex w-full">
+          <button
+            onClick={() => {
+              setEnquiryProgram(null);
+              setEnquiryOpen(true);
+            }}
+            className="flex-1 bg-green-600 text-white py-3 text-center font-bold"
+          >
+            Call Now
+          </button>
+          <button
+            onClick={() => {
+              setEnquiryProgram(null);
+              setEnquiryOpen(true);
+            }}
+            className="flex-1 bg-red-600 text-white py-3 text-center font-bold"
+          >
+            Live Chat
+          </button>
+        </div>
+      </div>
 
       {/* ─── TOP QUERIES ─────────────────────────────────────────────────── */}
      <section className="py-10 bg-black border-t border-gray-200">

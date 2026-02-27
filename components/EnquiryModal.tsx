@@ -31,6 +31,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const PHONE = "7042646766";
 
   useEffect(() => {
     setProg(program ?? "");
@@ -51,9 +52,8 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) throw new Error(data?.error ?? "Failed to submit");
-      setSuccess("Thanks! We will contact you soon.");
+      setSuccess("Thanks! Your enquiry has been submitted.");
       setName(""); setEmail(""); setPhone(""); setState(""); setProg("");
-      setTimeout(() => { onClose(); setSuccess(null); }, 1500);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to submit";
       setError(msg);
@@ -212,6 +212,42 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
 
         </form>
       </div>
+      {success ? (
+        <div className="fixed inset-0 z-[110] flex items-end md:items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl border border-green-200 w-full max-w-sm p-6 text-center">
+            <div className="text-green-600 font-extrabold text-lg mb-2">Submission Successful</div>
+            <div className="text-gray-600 text-sm mb-5">
+              Our team will contact you shortly. You can also reach us directly now.
+            </div>
+            <div className="flex gap-3">
+              <a
+                href={`tel:${PHONE}`}
+                onClick={() => {
+                  setSuccess(null);
+                  onClose();
+                }}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-lg text-sm"
+              >
+                Call {PHONE}
+              </a>
+              <a
+                href={`https://wa.me/91${PHONE}?text=${encodeURIComponent(
+                  `Hi, I submitted an enquiry for ${prog || "LPU Online"}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => {
+                  setSuccess(null);
+                  onClose();
+                }}
+                className="flex-1 bg-[#25D366] hover:brightness-95 text-white font-bold py-2.5 rounded-lg text-sm"
+              >
+                WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
