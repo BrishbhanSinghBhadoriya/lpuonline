@@ -168,7 +168,7 @@ const accreditations = [
   { name: "THE", img: "/world_education.jpg" },
   { name: "UGC", img: "/UGC.png" },
   { name: "Outlook", img: "/outlook_ranking.png" },
-  { name: "WES", img: "/world_education.jpg" },
+ 
 ];
 
 const features: Feature[] = [
