@@ -642,7 +642,7 @@ export default function LPUOnlinePage() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border ${
+              className={`px-6 py-2.5 rounded-md text-sm font-bold transition-all border ${
                 activeTab === tab
                   ? "bg-orange-500 text-white border-orange-500 shadow-md"
                   : "bg-white text-orange-500 border-orange-400 hover:bg-orange-50"
