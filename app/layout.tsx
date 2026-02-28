@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Poppins, Kalam, Patrick_Hand } from "next/font/google";
 import "./globals.css";
 
-const poppins = Poppins({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"], display: "swap" });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap"
+});
 const kalam = Kalam({ subsets: ["latin"], weight: ["300", "400", "700"], variable: "--font-kalam", display: "swap" });
 const patrick = Patrick_Hand({ subsets: ["latin"], weight: "400", variable: "--font-patrick", display: "swap" });
 
@@ -44,7 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.className} ${kalam.variable} ${patrick.variable} antialiased`}
+        className={`${poppins.variable} ${kalam.variable} ${patrick.variable} font-sans antialiased`}
       >
         {children}
       </body>
