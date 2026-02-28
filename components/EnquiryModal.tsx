@@ -81,24 +81,24 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
           <img
             src="/lpulogo.png"
             alt="Logo"
-            className="h-10 object-contain"
+            className="h-8 md:h-10 object-contain"
           />
         </div>
 
         {/* Heading */}
-        <h2 className="text-center text-gray-900 font-bold text-lg px-6">
+        <h2 className="font-patrick text-center text-gray-900 font-bold text-base md:text-lg px-6">
           Speak to an admission counsellor
         </h2>
 
         {/* Badges */}
         <div className="flex justify-center gap-4 mt-2 mb-4">
-          <span className="flex items-center gap-1 text-teal-600 font-semibold text-sm">
+          <span className="flex items-center gap-1 text-teal-600 font-semibold text-xs md:text-sm">
             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
             Online Exam
           </span>
-          <span className="flex items-center gap-1 text-teal-600 font-semibold text-sm">
+          <span className="flex items-center gap-1 text-teal-600 font-semibold text-xs md:text-sm">
             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
@@ -113,7 +113,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400"
             placeholder="Enter Name"
             required
           />
@@ -123,7 +123,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400"
             placeholder="Enter email"
             required
           />
@@ -133,7 +133,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             type="tel"
-            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400"
             placeholder="Enter Phone No."
             required
           />
@@ -143,7 +143,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             <select
               value={state}
               onChange={(e) => setState(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 appearance-none bg-white text-gray-700"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-orange-400 appearance-none bg-white text-gray-700"
               required
             >
               <option value="" disabled>Select State</option>

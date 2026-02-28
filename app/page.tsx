@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EnquiryModal from "@/components/EnquiryModal";
 
 // ── Types ──────────────────────────────────────────────────────────────
@@ -40,11 +40,122 @@ interface NavTab {
   label: string;
 }
 
+// ── Helpers (Mobile-only components) ────────────────────────────────────
+function InlineMobileEnquiry() {
+  const indianStates = [
+    "Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman and Nicobar Islands","Chandigarh","Dadra and Nagar Haveli and Daman and Diu","Delhi","Jammu and Kashmir","Ladakh","Lakshadweep","Puducherry"
+  ];
+  const courses = [
+    "Online MBA","Online M.Com","Online MCA","Online MA","Online M.Sc (Mathematics)","Online BCA","Online BBA","Online BA"
+  ];
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [state, setState] = useState("");
+  const [prog, setProg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const res = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, state, program: prog }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.error ?? "Failed to submit");
+      setSuccess("Thanks! Your enquiry has been submitted.");
+      setName(""); setEmail(""); setPhone(""); setState(""); setProg("");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to submit";
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <>
+      <div className="text-center mb-3">
+        <div className="text-gray-900 font-bold text-base md:text-lg">Speak to an admission counsellor</div>
+        <div className="flex items-center justify-center gap-4 mt-2">
+          <span className="flex items-center gap-1 text-teal-600 font-semibold text-xs md:text-sm">
+            <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            Online Exam
+          </span>
+          <span className="flex items-center gap-1 text-teal-600 font-semibold text-xs md:text-sm">
+            <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            100% Placement Assistance
+          </span>
+        </div>
+      </div>
+      <form onSubmit={submit} className="space-y-3">
+      <input value={name} onChange={(e)=>setName(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400" placeholder="Enter Name" required />
+      <input value={email} onChange={(e)=>setEmail(e.target.value)} type="email" className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400" placeholder="Enter email" required />
+      <input value={phone} onChange={(e)=>setPhone(e.target.value)} type="tel" className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 placeholder-gray-400" placeholder="Enter Phone No." required />
+      <div className="relative">
+        <select value={state} onChange={(e)=>setState(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 appearance-none bg-white text-gray-700" required>
+          <option value="" disabled>Select State</option>
+          {indianStates.map((s)=>(<option key={s} value={s}>{s}</option>))}
+        </select>
+        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        </div>
+      </div>
+      <div className="relative">
+        <select value={prog} onChange={(e)=>setProg(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 appearance-none bg-white text-gray-700">
+          <option value="" disabled>Select Course</option>
+          {courses.map((c)=>(<option key={c} value={c}>{c}</option>))}
+        </select>
+        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        </div>
+      </div>
+      <div className="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
+        <svg className="w-6 h-6 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+        <span className="text-gray-600 text-xs">Only a certified mentor will assist you</span>
+      </div>
+      <p className="text-gray-500 text-xs leading-relaxed">I authorize a representative to contact me via phone and/or email. This will override registry on DND/NDNC.</p>
+      {success && <div className="text-green-600 text-sm font-bold text-center">{success}</div>}
+      {error && <div className="text-red-600 text-sm font-bold text-center">{error}</div>}
+      <button type="submit" disabled={loading} className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-bold py-3 rounded-full text-sm">
+        {loading ? "Submitting..." : "Apply Now"}
+      </button>
+    </form>
+    </>
+  );
+}
+
+function MobileAccreditationSlider() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((v) => (v + 1) % accreditations.length), 2500);
+    return () => clearInterval(id);
+  }, []);
+  const item = accreditations[i];
+  return (
+    <div className="md:hidden flex justify-center mb-8">
+      <div className="bg-white px-10 py-7 rounded-2xl shadow-md border border-gray-200 w-[260px] flex items-center justify-center transition-all">
+        <img src={item.img} alt={item.name} className="h-20 w-auto object-contain" />
+      </div>
+    </div>
+  );
+}
+
 // ── Data ────────────────────────────────────────────────────────────────
 const navTabs: NavTab[] = [
   { label: "MBA" },
   { label: "M.Com" },
   { label: "MCA" },
+ { label: "MA" },
   { label: "M.Sc" },
   { label: "BCA" },
   { label: "BBA" },
@@ -260,7 +371,7 @@ export default function LPUOnlinePage() {
   
 
   return (
-    <div className="min-h-screen bg-white" style={{ fontFamily: "'Trebuchet MS', Georgia, serif" }}>
+    <div className="min-h-screen bg-white">
 
       {/* ─── NAVBAR ─────────────────────────────────────────────────────── */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -271,7 +382,7 @@ export default function LPUOnlinePage() {
       <img
         src="/lpulogo.png"
         alt="LPU Logo"
-        className="h-15 w-auto object-contain"
+        className="h-15 w-45 object-contain"
       />
     </div>
 
@@ -281,7 +392,7 @@ export default function LPUOnlinePage() {
         setEnquiryProgram(null);
         setEnquiryOpen(true);
       }}
-      className="bg-orange-400 hover:bg-orange-600 text-white  px-3 py-2 rounded-md text-1xl transition-all shadow-md"
+      className="bg-orange-400 hover:bg-orange-600 text-white px-3 py-2 rounded-md text-sm md:text-base transition-all shadow-md"
     >
       Enroll Now
     </button>
@@ -294,9 +405,9 @@ export default function LPUOnlinePage() {
         <div className="max-w-screen-2xl mx-auto px-6 md:px-10 grid md:grid-cols-2 gap-10 items-center w-full">
           {/* Left */}
           <div>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-3">
-              LPU Online Degree <br />
-              <span className="text-orange-500">Programmes</span>
+            <h1 className="text-2xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-3">
+              LPU Online Degree Programmes <br />
+              
             </h1>
 
             {/* Program pills */}
@@ -304,23 +415,30 @@ export default function LPUOnlinePage() {
               {navTabs.map((t) => (
                 <span
                   key={t.label}
-                  className="bg-white text-orange-400 text-1.5xl font-bold px-3 py-1 rounded-full border border-orange-200"
+                  className="bg-white text-orange-500 text-xs md:text-sm font-semibold px-3 py-1 rounded-full border border-orange-500"
                 >
                   {t.label}
                 </span>
               ))}
             </div>
 
-            <p className="text-gray-600 text-2xl mb-5 leading-relaxed">
+            <p className="text-gray-600 text-sm md:text-base mb-5 leading-relaxed">
               Get UGC Entitled Degree from India&apos;s Top Ranked University
             </p>
+            <div className="mb-4 md:hidden">
+              <img
+                src="/lpu-uni.jpg"
+                alt="LPU Campus"
+                className="w-full h-56 object-cover rounded-lg shadow"
+              />
+            </div>
             <div className="flex gap-3 mb-6">
               <button 
                 onClick={() => {
                   setEnquiryProgram(null);
                   setEnquiryOpen(true);
                 }}
-                className="bg-orange-400 hover:bg-orange-600 text-white  px-5 py-2.5 rounded-md text-2xl transition-all"
+                className="bg-orange-400 hover:bg-orange-600 text-white px-5 py-2.5 rounded-md text-sm md:text-base transition-all"
               >
                 Download Brochure
               </button>
@@ -329,7 +447,7 @@ export default function LPUOnlinePage() {
                   setEnquiryProgram(null);
                   setEnquiryOpen(true);
                 }}
-                className="bg-orange-400 hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-md text-2xl transition-all"
+                className="bg-orange-400 hover:bg-orange-600 text-white font-bold px-5 py-2.5 rounded-md text-sm md:text-base transition-all"
               >
                 Apply Now
               </button>
@@ -337,14 +455,18 @@ export default function LPUOnlinePage() {
             </div>
 
             {/* Countdown */}
-            <div className="inline-flex items-center gap-2 bg-white   px-4 py-2">
+            <div className="inline-flex items-center gap-2 bg-white px-4 py-2">
              
-              <span className="text-orange-700 font-bold text-2xl">Admission Closing in 5 Days</span>
+              <span className="text-red-500 text-sm md:text-base">Admission Closing in 5 Days</span>
+            </div>
+            {/* Mobile-only inline enquiry form after buttons and admission note */}
+            <div className="mt-4 md:hidden bg-white border border-orange-200 rounded-xl p-4 shadow-sm">
+              <InlineMobileEnquiry />
             </div>
           </div>
 
           {/* Right – building image */}
-          <div className="relative">
+          <div className="relative hidden md:block">
             <div className=" overflow-hidden shadow-2xl ">
               <img
                 src="/lpu-uni.jpg"
@@ -352,7 +474,6 @@ export default function LPUOnlinePage() {
                 className="w-full h-[22rem] md:h-[30rem] object-cover"
               />
             </div>
-           
           </div>
         </div>
       </section>
@@ -360,14 +481,15 @@ export default function LPUOnlinePage() {
     <section className="bg-blue-50 py-20 border-y border-gray-200">
   <div className="max-w-screen-2xl mx-auto px-6 md:px-16">
 
-    <h2 className="text-center text-black text-4xl md:text-5xl font-bold uppercase tracking-widest mb-4">
+    <h2 className="text-center text-black text-2xl md:text-5xl font-bold uppercase tracking-widest mb-4">
       Lovely Professional University Online
     </h2>
-    <p className="text-center text-gray-500 text-lg md:text-xl font-normal mt-2 mb-14">
+    <p className="text-center text-gray-500 text-sm md:text-xl font-normal mt-2 mb-14">
       LPU is the top-ranked and fastest-growing private university in India.
     </p>
 
-    <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14">
+    <MobileAccreditationSlider />
+    <div className="hidden md:flex flex-wrap justify-center items-center gap-8 md:gap-14">
       {accreditations.map((item) => (
         <div
           key={item.name}
