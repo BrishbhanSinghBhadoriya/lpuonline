@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   open: boolean;
@@ -23,6 +24,7 @@ const courses: string[] = [
 ];
 
 export default function EnquiryModal({ open, onClose, program }: Props) {
+  const router = useRouter();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -54,6 +56,10 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
       if (!res.ok) throw new Error(data?.error ?? "Failed to submit");
       setSuccess("Thanks! Your enquiry has been submitted.");
       setName(""); setEmail(""); setPhone(""); setState(""); setProg("");
+      // Redirect to thank you page after a short delay to show success state (optional, but requested redirect)
+      setTimeout(() => {
+        router.push("/thanks");
+      }, 1000);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to submit";
       setError(msg);
@@ -206,7 +212,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
               disabled={loading}
               className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-bold py-3 px-12 rounded-full text-sm transition-all"
             >
-              {loading ? "Submitting..." : "Apply Now"}
+              {loading ? "Your enquiry is being submitted..." : "Apply Now"}
             </button>
           </div>
 
