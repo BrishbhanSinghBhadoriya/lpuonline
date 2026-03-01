@@ -367,7 +367,14 @@ export default function LPUOnlinePage() {
   const [activeTab, setActiveTab] = useState<string>("All Courses");
   const [enquiryOpen, setEnquiryOpen] = useState<boolean>(false);
   const [enquiryProgram, setEnquiryProgram] = useState<string | null>(null);
-
+   
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setEnquiryProgram(null);
+    setEnquiryOpen(true);
+  }, 3000);
+  return () => clearTimeout(timer);
+}, []);
   const filteredPrograms = programs.filter((p) => {
     if (activeTab === "All Courses") return true;
     if (activeTab === "UG Courses") return p.type === "UG";
