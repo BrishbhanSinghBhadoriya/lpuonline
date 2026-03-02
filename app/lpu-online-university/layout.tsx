@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Kalam, Patrick_Hand } from "next/font/google";
-import "./globals.css";
+
 import Script from "next/script";
 
 const poppins = Poppins({
@@ -36,8 +36,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${poppins.variable} ${kalam.variable} ${patrick.variable} font-sans antialiased`}
     >
-      <head>
-        {/* ✅ Google Ads Script safely inside head */}
+      <body>
+        {/* ✅ Google Ads / Analytics Script */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17973403972"
           strategy="afterInteractive"
@@ -51,8 +51,32 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'AW-17973403972');
           `}
         </Script>
-      </head>
-      <body>
+
+        {/* ✅ Meta Pixel Script */}
+        <Script id="meta-pixel" strategy="afterInteractive">
+          {`
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1230848505368304');
+            fbq('track', 'PageView');
+          `}
+        </Script>
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=1230848505368304&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
+
         {children}
       </body>
     </html>

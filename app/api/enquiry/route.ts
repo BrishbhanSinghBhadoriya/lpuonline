@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     const phone = typeof body?.phone === "string" ? body.phone.trim() : "";
     const program = typeof body?.program === "string" ? body.program.trim() : "";
     const message = typeof body?.message === "string" ? body.message.trim() : "";
+    const url = typeof body?.url === "string" ? body.url.trim() : "";
     if (!name || !email || !phone) {
       return NextResponse.json({ error: "name, email, phone are required" }, { status: 400 });
     }
@@ -25,6 +26,7 @@ export async function POST(req: NextRequest) {
       phone,
       program: program || null,
       message: message || null,
+      url: url || null,
       source: "lpuonline",
       createdAt: new Date(),
     };
