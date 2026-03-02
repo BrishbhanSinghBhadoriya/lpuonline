@@ -37,6 +37,7 @@ export default function ThankYouPage() {
     return (
         <>
             {/* ✅ Meta Pixel Script */}
+              {/* ✅ Meta Pixel Script */}
             <Script id="meta-pixel-thank-you" strategy="afterInteractive">
                 {`
                     !function(f,b,e,v,n,t,s)
@@ -49,7 +50,7 @@ export default function ThankYouPage() {
                     'https://connect.facebook.net/en_US/fbevents.js');
                     fbq('init', '1230848505368304');
                     fbq('track', 'PageView');
-                    fbq('track', 'LeadNew');
+                    fbq('track', 'Lead');  // ← Standard event
                 `}
             </Script>
             <noscript>
