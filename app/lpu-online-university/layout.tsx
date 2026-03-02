@@ -37,20 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${poppins.variable} ${kalam.variable} ${patrick.variable} font-sans antialiased`}
     >
       <body>
-        {/* ✅ Google Ads / Analytics Script */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=AW-17973403972"
-          strategy="afterInteractive"
-          async
-        />
-        <Script id="google-ads" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-17973403972');
-          `}
-        </Script>
+        
+       
 
         {/* ✅ Meta Pixel Script */}
         <Script id="meta-pixel" strategy="afterInteractive">

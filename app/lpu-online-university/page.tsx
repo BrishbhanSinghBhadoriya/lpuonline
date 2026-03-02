@@ -67,14 +67,7 @@ function InlineMobileEnquiry() {
       const res = await fetch("/api/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          email,
-          phone,
-          state,
-          program: prog,
-          url: typeof window !== "undefined" ? window.location.href : ""
-        }),
+        body: JSON.stringify({ name, email, phone, state, program: prog }),
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) throw new Error(data?.error ?? "Failed to submit");

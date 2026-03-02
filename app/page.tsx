@@ -66,6 +66,7 @@ function InlineMobileEnquiry() {
     try {
       const res = await fetch("/api/enquiry", {
         method: "POST",
+
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
@@ -376,6 +377,11 @@ export default function LPUOnlinePage() {
   const [enquiryProgram, setEnquiryProgram] = useState<string | null>(null);
    
 useEffect(() => {
+  // ✅ Meta Pixel PageView firing on page load
+  if (typeof (window as any).fbq === "function") {
+    (window as any).fbq("track", "PageView");
+  }
+
   const timer = setTimeout(() => {
     setEnquiryProgram(null);
     setEnquiryOpen(true);
