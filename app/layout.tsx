@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Kalam, Patrick_Hand } from "next/font/google";
 import "./globals.css";
-import Script from "next/script"; 
+import Script from "next/script";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -49,24 +49,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${poppins.variable} ${kalam.variable} ${patrick.variable} font-sans antialiased`}
-      >
-        {children}
-
+      <head>
+        {/* ✅ beforeInteractive — gtag race condition fix */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17973403972"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
-        <Script id="google-ads" strategy="afterInteractive">
+        <Script id="google-ads" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config',  'AW-17973403972');
+            gtag('config', 'AW-17973403972');
           `}
         </Script>
-
+      </head>
+      <body
+        className={`${poppins.variable} ${kalam.variable} ${patrick.variable} font-sans antialiased`}
+      >
+        {children}
       </body>
     </html>
   );

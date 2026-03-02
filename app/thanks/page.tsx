@@ -7,11 +7,30 @@ export default function ThankYouPage() {
 
     useEffect(() => {
         setMounted(true);
-        if (typeof window !== "undefined" && typeof (window as any).gtag === "function") {
-            (window as any).gtag("event", "conversion", {
-                send_to: "AW-17973331962/u2NJCIrsiIEcEPqPrfpC",
-            });
-        }
+
+        let attempts = 0;
+
+        const fireConversion = () => {
+            if (typeof (window as any).gtag === "function") {
+                // ✅ gtag ready — fire karo
+                (window as any).gtag("event", "conversion", {
+                    send_to: "AW-17973403972/k2AtCInQ9YAcEMTCsfpC",
+                });
+            } else if (attempts < 20) {
+                // ⏳ gtag abhi ready nahi — 100ms baad retry
+                attempts++;
+                setTimeout(fireConversion, 100);
+            } else {
+                // 🛟 Fallback — dataLayer me directly push karo
+                (window as any).dataLayer = (window as any).dataLayer || [];
+                (window as any).dataLayer.push({
+                    event: "conversion",
+                    send_to: "AW-17973403972/k2AtCInQ9YAcEMTCsfpC",
+                });
+            }
+        };
+
+        fireConversion();
     }, []);
 
     if (!mounted) return null;
