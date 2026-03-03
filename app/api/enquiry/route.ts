@@ -18,6 +18,13 @@ export async function POST(req: NextRequest) {
     if (!name || !email || !phone) {
       return NextResponse.json({ error: "name, email, phone are required" }, { status: 400 });
     }
+
+    // ✅ Phone number validation: must be exactly 10 digits
+    const cleanPhone = phone.replace(/\D/g, "");
+    if (cleanPhone.length !== 10) {
+      return NextResponse.json({ error: "Please enter a valid 10-digit phone number." }, { status: 400 });
+    }
+
     const client = await clientPromise;
     const db = client.db(dbName);
     const doc = {
@@ -31,6 +38,40 @@ export async function POST(req: NextRequest) {
       createdAt: new Date(),
     };
     const result = await db.collection(collectionName).insertOne(doc);
+
+    // ✅ Send lead to CRM as well
+    const apiEndpoint = process.env.API_ENDPOINT;
+    if (apiEndpoint) {
+      try {
+        const crmResponse = await fetch(apiEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            email: email.toLowerCase(),
+            phone,
+            program: program || null,
+            message: message || null,
+            url: url || null,
+            source: "lpuonline",
+          }),
+        });
+
+        if (!crmResponse.ok) {
+          const errorData = await crmResponse.json().catch(() => null);
+          console.error("CRM API Error:", {
+            status: crmResponse.status,
+            statusText: crmResponse.statusText,
+            errorData,
+          });
+        }
+
+      } catch (crmErr) {
+        console.error("Failed to send lead to CRM:", crmErr);
+        // We continue because the lead is already saved in MongoDB
+      }
+    }
+
     return NextResponse.json({ ok: true, id: result.insertedId }, { status: 201 });
   } catch (err) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

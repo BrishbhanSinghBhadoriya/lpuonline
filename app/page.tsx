@@ -60,6 +60,14 @@ function InlineMobileEnquiry() {
   const [error, setError] = useState<string | null>(null);
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // ✅ Phone number validation: must be exactly 10 digits
+    const cleanPhone = phone.replace(/\D/g, "");
+    if (cleanPhone.length !== 10) {
+      setError("Please enter a valid 10-digit phone number.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setSuccess(null);
