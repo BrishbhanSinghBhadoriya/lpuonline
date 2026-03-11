@@ -6,6 +6,7 @@ type Props = {
   open: boolean;
   onClose: () => void;
   program?: string | null;
+  campaign?: "Meta_Search" | "Google_Search"; // ✅ NEW
 };
 
 const indianStates: string[] = [
@@ -23,7 +24,7 @@ const courses: string[] = [
   "Online M.Sc (Mathematics)", "Online BCA", "Online BBA", "Online BA",
 ];
 
-export default function EnquiryModal({ open, onClose, program }: Props) {
+export default function EnquiryModal({ open, onClose, program, campaign }: Props) {
   const router = useRouter();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -44,7 +45,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // ✅ Phone number validation: must be exactly 10 digits
     const cleanPhone = phone.replace(/\D/g, "");
     if (cleanPhone.length !== 10) {
       setError("Please enter a valid 10-digit phone number.");
@@ -54,24 +54,30 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
     setLoading(true);
     setError(null);
     setSuccess(null);
+
     try {
+      const currentUrl = typeof window !== "undefined" ? window.location.href : "";
+
       const res = await fetch("/api/enquiry", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           email,
-          phone,
+          phone: cleanPhone,
           state,
           program: prog,
-          url: typeof window !== "undefined" ? window.location.href : ""
+          source: currentUrl,                          // ✅ source = current page URL
+          campaign: campaign || "",                    // ✅ "Meta_Search" ya "Google_Search"
+          university: "Lovely Professional University", // ✅ hamesha fixed
         }),
       });
+
       const data = await res.json().catch(() => null);
       if (!res.ok) throw new Error(data?.error ?? "Failed to submit");
+
       setSuccess("Thanks! Your enquiry has been submitted.");
       setName(""); setEmail(""); setPhone(""); setState(""); setProg("");
-      // Redirect to thank you page after a short delay to show success state (optional, but requested redirect)
       setTimeout(() => {
         router.push("/thanks");
       }, 1000);
@@ -130,7 +136,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
         {/* Form */}
         <form onSubmit={submit} className="px-6 pb-6 space-y-3">
 
-          {/* Name */}
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -139,7 +144,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             required
           />
 
-          {/* Email */}
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -149,7 +153,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             required
           />
 
-          {/* Phone */}
           <input
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
@@ -159,7 +162,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             required
           />
 
-          {/* State Dropdown */}
           <div className="relative">
             <select
               value={state}
@@ -172,7 +174,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
-            {/* Custom chevron */}
             <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -180,7 +181,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             </div>
           </div>
 
-          {/* Course Dropdown */}
           <div className="relative">
             <select
               value={prog}
@@ -199,7 +199,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             </div>
           </div>
 
-          {/* Certified Mentor Info Box */}
           <div className="flex items-center gap-3 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
             <svg className="w-6 h-6 text-blue-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
@@ -207,12 +206,10 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             <span className="text-gray-600 text-xs">Only a certified mentor will assist you</span>
           </div>
 
-          {/* DND Text */}
           <p className="text-gray-500 text-xs leading-relaxed">
             I authorize a representative to contact me via phone and/or email. This will override registry on DND/NDNC.
           </p>
 
-          {/* Success / Error */}
           {success && (
             <div className="text-green-600 text-sm font-bold text-center">{success}</div>
           )}
@@ -220,7 +217,6 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             <div className="text-red-600 text-sm font-bold text-center">{error}</div>
           )}
 
-          {/* Submit Button */}
           <div className="flex justify-center pt-1">
             <button
               type="submit"
@@ -233,6 +229,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
 
         </form>
       </div>
+
       {success ? (
         <div className="fixed inset-0 z-[110] flex items-end md:items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl border border-green-200 w-full max-w-sm p-6 text-center">
@@ -243,10 +240,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
             <div className="flex gap-3">
               <a
                 href={`tel:${PHONE}`}
-                onClick={() => {
-                  setSuccess(null);
-                  onClose();
-                }}
+                onClick={() => { setSuccess(null); onClose(); }}
                 className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 rounded-lg text-sm"
               >
                 Call {PHONE}
@@ -257,10 +251,7 @@ export default function EnquiryModal({ open, onClose, program }: Props) {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => {
-                  setSuccess(null);
-                  onClose();
-                }}
+                onClick={() => { setSuccess(null); onClose(); }}
                 className="flex-1 bg-[#25D366] hover:brightness-95 text-white font-bold py-2.5 rounded-lg text-sm"
               >
                 WhatsApp

@@ -9,17 +9,23 @@ export async function POST(req: NextRequest) {
     const dbName = process.env.MONGODB_DB || "lpu";
     const collectionName = process.env.MONGODB_COLLECTION || "leads";
     const body = await req.json();
-    const name = typeof body?.name === "string" ? body.name.trim() : "";
-    const email = typeof body?.email === "string" ? body.email.trim() : "";
-    const phone = typeof body?.phone === "string" ? body.phone.trim() : "";
-    const program = typeof body?.program === "string" ? body.program.trim() : "";
-    const message = typeof body?.message === "string" ? body.message.trim() : "";
-    const url = typeof body?.url === "string" ? body.url.trim() : "";
+
+    const name     = typeof body?.name     === "string" ? body.name.trim()     : "";
+    const email    = typeof body?.email    === "string" ? body.email.trim()    : "";
+    const phone    = typeof body?.phone    === "string" ? body.phone.trim()    : "";
+    const program  = typeof body?.program  === "string" ? body.program.trim()  : "";
+    const message  = typeof body?.message  === "string" ? body.message.trim()  : "";
+    const state    = typeof body?.state    === "string" ? body.state.trim()    : "";
+
+    // ✅ source = URL, campaign, university
+    const source     = typeof body?.source     === "string" ? body.source.trim()     : "";
+    const campaign   = typeof body?.campaign   === "string" ? body.campaign.trim()   : "";
+    const university = typeof body?.university === "string" ? body.university.trim() : "Lovely Professional University";
+
     if (!name || !email || !phone) {
       return NextResponse.json({ error: "name, email, phone are required" }, { status: 400 });
     }
 
-    // ✅ Phone number validation: must be exactly 10 digits
     const cleanPhone = phone.replace(/\D/g, "");
     if (cleanPhone.length !== 10) {
       return NextResponse.json({ error: "Please enter a valid 10-digit phone number." }, { status: 400 });
@@ -27,19 +33,23 @@ export async function POST(req: NextRequest) {
 
     const client = await clientPromise;
     const db = client.db(dbName);
+
     const doc = {
       name,
       email: email.toLowerCase(),
-      phone,
-      program: program || null,
-      message: message || null,
-      url: url || null,
-      source: "lpuonline",
+      phone: cleanPhone,
+      program:    program    || null,
+      message:    message    || null,
+      state:      state      || null,
+      source:     source     || null,      // ✅ current page URL
+      campaign:   campaign   || null,      // ✅ "Google_Search" ya "Meta_Search"
+      university: university,              // ✅ "Lovely Professional University"
       createdAt: new Date(),
     };
+
     const result = await db.collection(collectionName).insertOne(doc);
 
-    // ✅ Send lead to CRM as well
+    // ✅ Send lead to CRM
     const apiEndpoint = process.env.API_ENDPOINT;
     if (apiEndpoint) {
       try {
@@ -48,12 +58,14 @@ export async function POST(req: NextRequest) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name,
-            email: email.toLowerCase(),
-            phone,
-            program: program || null,
-            message: message || null,
-            url: url || null,
-            source: "lpuonline",
+            email:      email.toLowerCase(),
+            phone:      cleanPhone,
+            program:    program    || null,
+            message:    message    || null,
+            state:      state      || null,
+            source:     source     || null,     // ✅ URL
+            campaign:   campaign   || null,     // ✅ "Google_Search" ya "Meta_Search"
+            university: university,             // ✅ "Lovely Professional University"
           }),
         });
 
@@ -65,10 +77,8 @@ export async function POST(req: NextRequest) {
             errorData,
           });
         }
-
       } catch (crmErr) {
         console.error("Failed to send lead to CRM:", crmErr);
-        // We continue because the lead is already saved in MongoDB
       }
     }
 
