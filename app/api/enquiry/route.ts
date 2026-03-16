@@ -41,9 +41,9 @@ export async function POST(req: NextRequest) {
       program:    program    || null,
       message:    message    || null,
       state:      state      || null,
-      source:     source     || null,      // ✅ current page URL
-      campaign:   campaign   || null,      // ✅ "Google_Search" ya "Meta_Search"
-      university: university,              // ✅ "Lovely Professional University"
+      source:     source     || null,      
+      campaign:   campaign   || null,      
+      university: university,              
       createdAt: new Date(),
     };
 
@@ -63,9 +63,9 @@ export async function POST(req: NextRequest) {
             program:    program    || null,
             message:    message    || null,
             state:      state      || null,
-            source:     source     || null,     // ✅ URL
-            campaign:   campaign   || null,     // ✅ "Google_Search" ya "Meta_Search"
-            university: university,             // ✅ "Lovely Professional University"
+            source:     source     || null,     
+            campaign:   campaign   || null,     
+            university: university,             
           }),
         });
 
