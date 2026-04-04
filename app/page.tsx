@@ -56,7 +56,6 @@ function InlineMobileEnquiry() {
   const [state, setState] = useState("");
   const [prog, setProg] = useState("");
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,7 +69,6 @@ function InlineMobileEnquiry() {
 
     setLoading(true);
     setError(null);
-    setSuccess(null);
     try {
       const res = await fetch("/api/enquiry", {
         method: "POST",
@@ -87,12 +85,7 @@ function InlineMobileEnquiry() {
       });
       const data = await res.json().catch(() => null);
       if (!res.ok) throw new Error(data?.error ?? "Failed to submit");
-      setSuccess("Thanks! Your enquiry has been submitted.");
-      setName(""); setEmail(""); setPhone(""); setState(""); setProg("");
-      // Redirect to thank you page after a short delay
-      setTimeout(() => {
-        router.push("/thanks");
-      }, 1000);
+      router.push("/thanks");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to submit";
       setError(msg);
@@ -146,7 +139,6 @@ function InlineMobileEnquiry() {
           <span className="text-gray-600 text-xs">Only a certified mentor will assist you</span>
         </div>
         <p className="text-gray-500 text-xs leading-relaxed">I authorize a representative to contact me via phone and/or email. This will override registry on DND/NDNC.</p>
-        {success && <div className="text-green-600 text-sm font-bold text-center">{success}</div>}
         {error && <div className="text-red-600 text-sm font-bold text-center">{error}</div>}
         <button type="submit" disabled={loading} className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white font-bold py-3 rounded-full text-sm transition-all">
           {loading ? "Your enquiry is being submitted..." : "Apply Now"}
